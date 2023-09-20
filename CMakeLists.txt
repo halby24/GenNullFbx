@@ -4,14 +4,20 @@ cmake_minimum_required(VERSION ${CMAKE_MIN_REQ_VERSION})
 INCLUDE("variables.cmake")
 INCLUDE("CMakeSettings.txt")
 
-FBX_PROJECT(ReSaveFbx .)
+FBX_PROJECT(GenNullFbx .)
 SET(FBX_TARGET_SOURCE
-    src/main.cxx
+    src/GenNullFbx.h
+    src/GenNullFbx.cxx
     src/Common.h
     src/Common.cxx
 )
-ADD_EXECUTABLE(
+ADD_LIBRARY(
    ${FBX_TARGET_NAME}
+   SHARED
    ${FBX_TARGET_SOURCE}
 )
 SET_SAMPLES_GLOBAL_FLAGS()
+
+TARGET_COMPILE_FEATURES(${FBX_TARGET_NAME} PUBLIC cxx_std_17)
+
+INSTALL(TARGETS ${FBX_TARGET_NAME} DESTINATION ${FBX_INSTALL_PATH})
