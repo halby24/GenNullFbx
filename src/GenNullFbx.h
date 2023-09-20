@@ -3,6 +3,6 @@
 
 #define DLLEXPORT extern "C" __declspec(dllexport)
 
-DLLEXPORT int __stdcall GenNullFbx(const char* pFilePath, bool pVerbose);
+DLLEXPORT int __stdcall GenNullFbx(const char* pFilePath);
 
 #endif

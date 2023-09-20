@@ -4,7 +4,7 @@
 
 static bool gVerbose = true;
 
-int GenNullFbx(char* pFilePath)
+int GenNullFbx(const char* pFilePath)
 {
     FbxManager* lSdkManager = NULL;
     FbxScene* lScene = NULL;
@@ -19,7 +19,8 @@ int GenNullFbx(char* pFilePath)
 	if( lFilePath.IsEmpty() )
 	{
         lResult = false;
-        FBXSDK_printf("\n\nUsage: ImportScene <FBX file name>\n\n");
+        FBXSDK_printf("\n\nFile name is not provided!\n\n");
+        return 1;
 	}
 	else
 	{
@@ -30,9 +31,10 @@ int GenNullFbx(char* pFilePath)
         lFilePath = lPath;
 	}
 
-    auto lName = std::filesystem::path(lFilePath.Buffer()).stem().string().c_str();
+    FbxString lName(std::filesystem::path(lFilePath.Buffer()).stem().string().c_str());
     auto lNode = FbxNode::Create(lSdkManager, lName);
-    lNode->SetNodeAttribute(FbxNull::Create(lSdkManager, lName));
+    auto lNull = FbxNull::Create(lSdkManager, lName);
+    lNode->SetNodeAttribute(lNull);
     lScene->GetRootNode()->AddChild(lNode);
 
     lResult = SaveScene(lSdkManager, lScene, lFilePath.Buffer());
@@ -40,11 +42,10 @@ int GenNullFbx(char* pFilePath)
     {
         FBXSDK_printf("\n\nAn error occurred while saving the scene...\n");
         DestroySdkObjects(lSdkManager, lResult);
-        return 0;
+        return 1;
     }
 
     // Destroy all objects created by the FBX SDK.
     DestroySdkObjects(lSdkManager, lResult);
-
     return 0;
 }

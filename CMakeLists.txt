@@ -19,5 +19,17 @@ ADD_LIBRARY(
 SET_SAMPLES_GLOBAL_FLAGS()
 
 TARGET_COMPILE_FEATURES(${FBX_TARGET_NAME} PUBLIC cxx_std_17)
-
 INSTALL(TARGETS ${FBX_TARGET_NAME} DESTINATION ${FBX_INSTALL_PATH})
+
+IF(WIN32)
+    FBX_PROJECT(SaveFbxTest .)
+    ADD_EXECUTABLE(
+        SaveFbxTest
+        test/SaveFbxTest.cxx
+    )
+    TARGET_LINK_LIBRARIES(SaveFbxTest GenNullFbx)
+    ADD_TEST(
+        NAME SaveFbxTest
+        COMMAND $<TARGET_FILE:SaveFbxTest>
+    )
+ENDIF()
